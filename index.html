@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMA - Ingenieros Mecánicos & Asociados</title>
+  
+  <link rel="icon" type="image/png" href="FAVICON.png">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #00138e;       
+      --primary-hover: #0019b8;       
+      --secondary-color: #212529;     
+      --light-bg: #f8f9fa;            
+      --slab-font: 'Roboto Slab', serif; 
+      --body-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
+
+    body {
+      font-family: var(--body-font);
+      overflow-x: hidden;
+    }
+
+    h2, h4, h5 {
+      font-family: var(--slab-font);
+      font-weight: 600;
+    }
+
+    /* ============================================================= */
+    /* NAVBAR GLOBAL FIJA */
+    /* ============================================================= */
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      background-color: #ffffff !important;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1035; 
+      height: 56px;
+    }
+    
+    .navbar .nav-link {
+      font-family: var(--slab-font);
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .navbar .navbar-nav .nav-link.active {
+      color: var(--primary-color) !important;
+    }
+
+    .navbar-toggler {
+      padding: 4px 8px !important; 
+      font-size: 1.1rem !important; 
+      margin-left: -8px; 
+      border: none !important;
+    }
+    .navbar-toggler:focus {
+      box-shadow: none !important;
+    }
+
+    .mi-logo {
+      height: 25px; 
+      width: auto;  
+      transition: all 0.3s ease;
+    }
+
+    @media (min-width: 992px) {
+      .navbar {
+        height: 66px; 
+      }
+      .mi-logo {
+        height: 35px; 
+      }
+    }
+
+    /* ============================================================= */
+    /* BARRA LATERAL MÓVIL (SIDEBAR) CORREGIDA EN RAÍZ */
+    /* ============================================================= */
+    
+    /* Capa de fondo oscurecido para el resto de la página */
+    .navbar-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5); 
+      z-index: 3000 !important; 
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .navbar-backdrop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Contenedor del Sidebar Independiente */
+    .sidebar-movil {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      height: 100vh !important;
+      width: 280px !important; 
+      background-color: #ffffff !important; 
+      z-index: 4000 !important; 
+      box-shadow: 10px 0 40px rgba(0,0,0,0.15) !important;
+      padding: 24px 16px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+      
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sidebar-movil.show {
+      transform: translateX(0) !important;
+    }
+
+    .sidebar-header {
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 35px;
+      padding: 0 8px;
+    }
+
+    @media (min-width: 992px) {
+      .navbar-backdrop {
+        display: none !important;
+      }
+      .sidebar-movil {
+        position: static !important;
+        height: auto !important;
+        width: auto !important;
+        background-color: transparent !important;
+        z-index: auto !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        flex-direction: row !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .sidebar-header {
+        display: none !important;
+      }
+    }
+
+    /* Estilos de los enlaces */
+    .navbar-nav {
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 4px; 
+    }
+
+    .navbar-nav .nav-item {
+      width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+      display: flex !important;
+      align-items: center !important;
+      gap: 16px; 
+      padding: 12px 16px !important; 
+      color: #495057 !important; 
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background-color: #f8f9fa;
+      color: #212529 !important;
+    }
+
+    .navbar-nav .nav-link i {
+      font-size: 1.2rem;
+      color: #868e96;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .navbar-nav .nav-link.active {
+      background-color: rgba(0, 19, 142, 0.06) !important; 
+      color: var(--primary-color) !important;
+    }
+
+    .navbar-nav .nav-link.active i {
+      color: var(--primary-color) !important;
+    }
+
+    @media (min-width: 992px) {
+      .navbar-nav {
+        flex-direction: row !important;
+        gap: 0px;
+        margin-left: auto !important; 
+      }
+      .navbar-nav .nav-item {
+        width: auto;
+      }
+      .navbar-nav .nav-link {
+        padding: 8px 16px !important;
+        border-radius: 0;
+      }
+      .navbar-nav .nav-link:hover {
+        background-color: transparent;
+        color: var(--primary-color) !important;
+      }
+      .navbar-nav .nav-link.active {
+        background-color: transparent !important;
+      }
+    }
+    /* ============================================================= */
+
+    /* Sección Hero con imagen local */
+    .hero-section {
+      background: linear-gradient(rgba(0, 19, 142, 0.45), rgba(33, 37, 41, 0.8)), url('imabackground1.jpg') no-repeat center center/cover;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      color: white;
+      padding-top: 56px; 
+    }
+    @media (min-width: 992px) {
+      .hero-section {
+        padding-top: 66px; 
+      }
+    }
+
+    .hero-section h1, 
+    .hero-section p {
+      font-family: var(--slab-font);
+    }
+
+    .btn-custom-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .btn-custom-primary:hover {
+      background-color: var(--primary-hover);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 19, 142, 0.3);
+    }
+
+    /* Pestañas de Servicios */
+    .service-tabs .nav-link {
+      color: var(--secondary-color);
+      font-family: var(--slab-font);
+      font-weight: 600;
+      border: 1px solid #dee2e6;
+      margin-bottom: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .service-tabs .nav-link.active {
+      background-color: var(--primary-color) !important;
+      color: white !important;
+      border-color: var(--primary-color);
+    }
+
+    .service-detail-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+      background: #fff;
+    }
+    
+    .servicio-img-header {
+      height: 280px;
+      object-fit: cover;
+      width: 100%;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .list-group-item-custom {
+      border: none;
+      padding: 12px 15px;
+      border-bottom: 1px solid #f1f1f1;
+    }
+    .list-group-item-custom:last-child {
+      border-bottom: none;
+    }
+
+    /* Sección Sobre Nosotros */
+    .about-section {
+      padding: 80px 0;
+      background-color: var(--light-bg);
+    }
+
+    /* Sección de Marcas */
+    .logos-section {
+      padding: 60px 0;
+      background-color: #ffffff;
+    }
+    .logo-item {
+      filter: grayscale(100%);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+      max-width: 130px;
+      height: auto;
+    }
+    .logo-item:hover {
+      filter: grayscale(0%);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--secondary-color);
+      color: #ced4da;
+      padding: 40px 0 20px 0;
+    }
+    .footer-contact-link {
+      color: #ced4da;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-contact-link:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar-backdrop" id="menuBackdrop"></div>
+
+  <div class="sidebar-movil" id="navbarNav">
+    <div class="sidebar-header">
+      <img src="LOGO.png" alt="IMA Menú" style="height: 22px; width: auto;">
+      <button type="button" class="btn-close" id="botonCerrarLateral" aria-label="Cerrar"></button>
+    </div>
+
+    <ul class="navbar-nav text-start text-lg-center">
+      <li class="nav-item">
+        <a class="nav-link active" href="#inicio"><i class="bi bi-house d-lg-none"></i>Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#nosotros"><i class="bi bi-info-circle d-lg-none"></i>Nosotros</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#servicios"><i class="bi bi-grid d-lg-none"></i>Servicios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#marcas"><i class="bi bi-layers d-lg-none"></i>Marcas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contacto"><i class="bi bi-envelope d-lg-none"></i>Contacto</a>
+      </li>
+    </ul>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container d-flex align-items-center justify-content-between">
+      
+      <button class="navbar-toggler" type="button" id="botonMenuLateral" aria-label="Abrir navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand mx-auto mx-lg-0 my-auto d-flex align-items-center" href="#">
+        <img src="LOGO.png" alt="IMA Logotipo" class="mi-logo">
+      </a>
+      
+      <div class="d-lg-none" style="width: 34px;"></div>
+
+      <div class="collapse navbar-collapse justify-content-end d-none d-lg-block">
+        </div>
+
+    </div>
+  </nav>
+
+  <header id="inicio" class="hero-section">
+    <div class="container text-center text-md-start">
+      <div class="row">
+        <div class="col-md-8" data-aos="fade-up" data-aos-duration="1000">
+          <h1 class="display-4 fw-bold mb-3">IMA - Ingenieros Mecánicos & Asociados</h1>
+          <p class="lead mb-4">Tu socio de ingenieria mecánica. Soluciones innovadoras para el éxito de tu proyecto!</p>
+          <a href="#contacto" class="btn btn-custom-primary btn-lg px-4 shadow">Contáctanos Hoy</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="nosotros" class="about-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0" data-aos="fade-right" data-aos-delay="200">
+          <img src="quienesomos.jpg" alt="Nosotros" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-6" data-aos="fade-left" data-aos-delay="400">
+          <h2 class="mb-3" style="color: var(--primary-color);">Quiénes Somos?</h2>
+          <p class="text-muted">En IMA, desarrollamos soluciones de ingeniería mecánica que optimizan tus procesos, reducen costos y mejoran la eficiencia energética.</p>
+          <p class="text-muted">Nuestros diseños innovadores te ayudaran a alcanzar tus objetivos de sostenibilidad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <h2 style="color: var(--primary-color);">Catálogo Completo de Servicios y Especialidades</h2>
+        <p class="text-muted">Explora nuestras capacidades de ingeniería y soluciones de alta tecnología para la optimización industrial</p>
+      </div>
+      
+      <div class="row g-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-lg-4">
+          <div class="nav flex-column nav-pills service-tabs" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="nav-link active p-3 text-start shadow-sm" id="rama1-tab" data-bs-toggle="pill" data-bs-target="#rama1" type="button" role="tab" aria-controls="rama1" aria-selected="true">
+              <i class="bi bi-cpu me-2"></i> Diseño, Manufactura y PLM
+            </button>
+            <button class="nav-link p-3 text-start shadow-sm" id="rama2-tab" data-bs-toggle="pill" data-bs-target="#rama2" type="button" role="tab" aria-controls="rama2" aria-selected="false">
+              <i class="bi bi-display me-2"></i> Simulación Avanzada (CAE)
+            </button>
+            <button class="nav-link p-3 text-start shadow-sm" id="rama3-tab" data-bs-toggle="pill" data-bs-target="#rama3" type="button" role="tab" aria-controls="rama3" aria-selected="false">
+              <i class="bi bi-robot me-2"></i> Automatización y Robótica
+            </button>
+            <button class="nav-link p-3 text-start shadow-sm" id="rama4-tab" data-bs-toggle="pill" data-bs-target="#rama4" type="button" role="tab" aria-controls="rama4" aria-selected="false">
+              <i class="bi bi-wind me-2"></i> Energía, Fluidos y HVAC
+            </button>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="tab-content" id="v-pills-tabContent">
+            
+            <div class="tab-pane fade show active" id="rama1" role="tabpanel" aria-labelledby="rama1-tab">
+              <div class="service-detail-card overflow-hidden">
+                <img src="diseño.jpg" class="servicio-img-header" alt="Diseño y Manufactura Mecánica">
+                <div class="p-4">
+                  <h4 class="fw-bold mb-3" style="color: var(--primary-color);">Diseño, Manufactura y Ciclo de Vida</h4>
+                  <p class="text-muted mb-4">Abarcamos desde la concepción de la idea y el dibujo técnico asistido, hasta la fabricación física, validación de materiales y gestión de su ciclo completo.</p>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Diseño de Maquinaria y Equipos Industriales:</strong> Concepción, cálculo y modelado de elementos mecánicos complejos.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Mecánica de Materiales y Ensayo:</strong> Análisis del comportamiento físico, resistencia, fatiga y pruebas de materiales.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Mecanizado:</strong> Processes de manufactura de alta precisión por eliminación de viruta.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Servicios de Prototipado y Pruebas:</strong> Creación de modelos preliminares y validación experimental en entornos reales.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Gestión del Ciclo de Vida del Producto (PLM):</strong> Administración integral del trayecto del producto, optimizando costos y calidad.</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="rama2" role="tabpanel" aria-labelledby="rama2-tab">
+              <div class="service-detail-card overflow-hidden">
+                <img src="simulacion.jpg" class="servicio-img-header" alt="Simulación Avanzada e Ingeniería Asistida">
+                <div class="p-4">
+                  <h4 class="fw-bold mb-3" style="color: var(--primary-color);">Simulación Avanzada e Ingeniería Asistida por Computadora (CAE)</h4>
+                  <p class="text-muted mb-4">Utilizamos software predictivo de alta tecnología para evaluar el comportamiento estructural, térmico y de fluidos bajo condiciones reales de operación.</p>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Análisis y Simulación por Elementos Finitos (FEA):</strong> Evaluación computacional de esfuerzos, deformaciones mecánicas y puntos críticos de falla.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Dinámica de Fluidos Computacional (CFD):</strong> Modelado avanzado del comportamiento de flujos de gases y líquidos en sistemas industriales.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Estudios de Transferencia de Calor y Termodinámica:</strong> Análisis de flujos térmicos, sistemas de enfriamiento y balances de energía.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Control de Vibraciones e Ingeniería Acústica:</strong> Monitoreo, diagnóstico, aislamiento y mitigación de ruido u oscilaciones mecánicas dañinas.</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="rama3" role="tabpanel" aria-labelledby="rama3-tab">
+              <div class="service-detail-card overflow-hidden">
+                <img src="automatizacion.jpg" class="servicio-img-header" alt="Automatización y Células Robóticas">
+                <div class="p-4">
+                  <h4 class="fw-bold mb-3" style="color: var(--primary-color);">Automatización, Robótica y Sistemas de Control</h4>
+                  <p class="text-muted mb-4">Unión de la mecánica de precisión con la electrónica e informática para diseñar entornos productivos inteligentes, autónomos y eficientes.</p>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Robótica y Sistemas Mecatrónicos:</strong> Diseño e integración de brazos robóticos, efectores finales y actuadores automatizados.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Desarrollo de Sistemas de Automatización y Control (PLC, SCADA):</strong> Programación e interfaz de supervisión para el control maestro de líneas de producción.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Automatización Industrial Avanzada:</strong> Modernización de procesos manuales mediante sensórica avanzada e inteligencia de manufactura.</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="rama4" role="tabpanel" aria-labelledby="rama4-tab">
+              <div class="service-detail-card overflow-hidden">
+                <img src="energia.jpg" class="servicio-img-header" alt="Sistemas de Energía y Fluidos Industriales">
+                <div class="p-4">
+                  <h4 class="fw-bold mb-3" style="color: var(--primary-color);">Energía, Fluidos y Confort Ambiental (HVAC)</h4>
+                  <p class="text-muted mb-4">Especialistas en la conversión energética limpia, movimiento eficiente de fluidos pesados, climatización industrial y optimización de recursos.</p>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Energías Renovables (Eólica, Solar, Geotérmica):</strong> Desarrollo conceptual e implementación de infraestructura para generación energética limpia.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Mecánica de Fluidos y Turbomaquinaria:</strong> Cálculo, selección y diseño especializado de bombas, compresores y turbinas de potencia.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Ingeniería HVAC y Climatización:</strong> Sistemas a gran escala de calefacción, ventilación y aire acondicionado para naves industriales.</div>
+                    </li>
+                    <li class="list-group-item list-group-item-custom d-flex align-items-start">
+                      <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                      <div><strong>Auditorías de Eficiencia Energética:</strong> Diagnóstico de plantas industriales para mitigar pérdidas de potencia y optimizar el consumo de energía.</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5" data-aos="fade-up">
+        <div class="col-12 text-center">
+          <div class="p-3 bg-light rounded d-inline-block border">
+            <p class="mb-0 text-muted small">
+              <i class="bi bi-tools text-primary me-2"></i>
+              <strong>Servicio Transversal Continuo:</strong> Todas nuestras ramas integran ingeniería de <strong>Mantenimiento Preventivo y Correctivo a Equipo</strong> para asegurar la alta disponibilidad de sus instalaciones.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="marcas" class="logos-section text-center">
+    <div class="container" data-aos="zoom-out" data-aos-duration="800">
+      <h4 class="text-muted mb-4 fw-light">Marcas y Clientes que Confían en Nosotros</h4>
+      <div class="row justify-content-center align-items-center g-5">
+        <div class="col-6 col-sm-3 col-md-2">
+          <img src="marca1.jpg" alt="Partner Industrial 1" class="img-fluid logo-item">
+        </div>
+        <div class="col-6 col-sm-3 col-md-2">
+          <img src="marca2.jpg" alt="Partner Industrial 2" class="img-fluid logo-item">
+        </div>
+        <div class="col-6 col-sm-3 col-md-2">
+          <img src="marca3.jpg" alt="Partner Industrial 3" class="img-fluid logo-item">
+        </div>
+        <div class="col-6 col-sm-3 col-md-2">
+          <img src="marca4.jpg" alt="Partner Industrial 4" class="img-fluid logo-item">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8" data-aos="fade-up">
+          <div class="bg-white p-5 rounded shadow-sm">
+            <h2 class="text-center mb-4" style="color: var(--primary-color);">Solicita una Cotización vía WhatsApp</h2>
+            <form id="whatsappForm">
+              <div class="mb-3">
+                <label class="form-label" for="nombre">Nombre o Razón Social</label>
+                <input type="text" id="nombre" class="form-control" required placeholder="Ej. Industrial Coahuila S.A. de C.V. / Ing. Juan Pérez">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="requerimiento">Requerimiento o Proyecto</label>
+                <textarea id="requerimiento" class="form-control" rows="5" required placeholder="Describe los requerimientos o especialidad técnica que necesita tu proyecto..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-success w-100 py-2">
+                <i class="bi bi-whatsapp me-2"></i> Enviar por WhatsApp
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center text-md-start">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-7 mb-3 mb-md-0">
+          <h5 class="text-white fw-bold mb-2">IMA - Ingenieros Mecánicos & Asociados</h5>
+          
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-4">
+            <a href="tel:8441043774" class="footer-contact-link small">
+              <i class="bi bi-telephone-fill text-white"></i>844 104 3774
+            </a>
+            
+            <span class="text-muted d-none d-md-inline">|</span>
+            
+            <a href="mailto:contacto@ima.org" class="footer-contact-link small">
+              <i class="bi bi-envelope-fill text-white"></i>contacto@ima.org
+            </a>
+          </div>
+          
+          <p class="small text-muted mt-2 mb-0">Saltillo, Coahuila, México.</p>
+        </div>
+        <div class="col-md-5 text-md-end text-center mt-2 mt-md-0">
+          <p class="small mb-0">&copy; 2026 Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  
+  <script>
+    AOS.init({
+      duration: 800,      
+      easing: 'ease-out', 
+      once: false,        
+      offset: 120         
+    });
+
+    // CONTROL DEL MENU LATERAL PERSONALIZADO EN RAÍZ
+    const botonMenu = document.getElementById('botonMenuLateral');
+    const botonCerrar = document.getElementById('botonCerrarLateral');
+    const menuLateral = document.getElementById('navbarNav');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+    const navLinks = document.querySelectorAll('.sidebar-movil .nav-link');
+    const contenedorPc = document.querySelector('.navbar .collapse');
+
+    if (window.innerWidth >= 992 && menuLateral && contenedorPc) {
+      const listaMenu = menuLateral.querySelector('.navbar-nav');
+      if (listaMenu) {
+        contenedorPc.appendChild(listaMenu.cloneNode(true));
+      }
+    }
+
+    function abrirMenu() {
+      if (window.innerWidth < 992) {
+        menuLateral.classList.add('show');
+        menuBackdrop.classList.add('show');
+        document.body.style.overflow = 'hidden'; 
+      }
+    }
+
+    function cerrarMenu() {
+      if (window.innerWidth < 992) {
+        menuLateral.classList.remove('show');
+        menuBackdrop.classList.remove('show');
+        document.body.style.overflow = ''; 
+      }
+    }
+
+    botonMenu.addEventListener('click', abrirMenu);
+    if(botonCerrar) botonCerrar.addEventListener('click', cerrarMenu);
+    menuBackdrop.addEventListener('click', cerrarMenu);
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        cerrarMenu();
+      });
+    });
+
+    // DETECTOR DE SECCIÓN ACTIVA (INTERSECTION OBSERVER)
+    const secciones = document.querySelectorAll('header[id], section[id]');
+    
+    const opcionesObserver = {
+      root: null,
+      rootMargin: '-30% 0px -60% 0px', 
+      threshold: 0
+    };
+
+    const detectorSecciones = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idSeccionActiva = entry.target.getAttribute('id');
+          
+          const todosLosEnlaces = document.querySelectorAll('.nav-link');
+          todosLosEnlaces.forEach(enlace => {
+            enlace.classList.remove('active');
+            if (enlace.getAttribute('href') === `#${idSeccionActiva}`) {
+              enlace.classList.add('active');
+            }
+          });
+        }
+      });
+    }, opcionesObserver);
+
+    secciones.forEach(seccion => detectorSecciones.observe(seccion));
+
+    // FORMULARIO DE WHATSAPP
+    document.getElementById('whatsappForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const telefonoEmpresa = "528441043774"; 
+      const nombre = document.getElementById('nombre').value;
+      const requerimiento = document.getElementById('requerimiento').value;
+
+      const textoMensaje = `¡Hola, IMA Ingenieros Mecánicos & Asociados! 👋%0A%0A` +
+                           `Me gustaría solicitar una cotización especializada para un proyecto.%0A%0A` +
+                           `*• Empresa / Contacto:* ${encodeURIComponent(nombre)}%0A` +
+                           `*• Detalles del Requerimiento:* ${encodeURIComponent(requerimiento)}`;
+
+      const urlWhatsapp = `https://wa.me/${telefonoEmpresa}?text=${textoMensaje}`;
+      window.open(urlWhatsapp, '_blank');
+    });
+  </script>
+</body>
+</html>
